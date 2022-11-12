@@ -1,0 +1,40 @@
+server:
+  port: 1001
+
+spring:
+  application:
+    name: consumer01
+
+
+eureka:
+  client: # \u5BA2\u6237\u7AEF\u76F8\u5173\u7684\u914D\u7F6E
+    service-url:
+      #      defaultZone: http://eureka-server-001/eureka
+      defaultZone: http://eureka7001.com:7001/eureka #\u6307\u5B9A\u6CE8\u518C\u5730\u5740
+
+    register-with-eureka: true # \u53EF\u4EE5\u4E0D\u5F80eureka\u6CE8\u518C
+    fetch-registry: true # \u62C9\u53D6\u670D\u52A1\u5217\u8868\u5230\u672C\u5730
+    registry-fetch-interval-seconds: 10 # \u4E3A\u4E86\u7F13\u89E3\u670D\u52A1\u5217\u8868\u810F\u8BFB\u95EE\u9898\uFF0C\u65F6\u95F4\u8D8A\u77ED \uFF0C\u810F\u8BFB\u8D8A\u5C11\uFF0C\u4F46\u662F\u6BD4\u8F83\u8017\u6027\u80FD\uFF0C\u5C31\u662F\u6BCF\u9694\u591A\u4E45\u53BB\u53D6\u670D\u52A1\u5217\u8868
+  instance:
+    hostname: localhost #\u5E94\u7528\u540D\u79F0\uFF0C\u6700\u597D\u5199\u4E3B\u673A
+    instance-id: ${eureka.instance.hostname}:${spring.application.name}:${server.port}
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 10 #\u5B9E\u4F8B\u7EED\u7EA6\u65F6\u95F4
+
+ribbon:
+  eager-load:
+    enabled: true # ribbon如果只有它自己，肯定不能做负载均衡  ribbon需要去注册中心拉去服务列表 false是懒加载
+  eureka:
+    enabled: true
+  http: # 我们使用ribbon用的RestTemplate发请求，java.net.HttpUrlConnection发的请求，很方便，但是不支持连接池
+    client: # 发请求的工具很对 httpClient 它支持连接池 效率更好  如果你想改请求的工具，记得加这个依赖即可
+      enabled: false
+
+  okhttp:  # 这是请求工具，轻量级，移动端使用较多
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

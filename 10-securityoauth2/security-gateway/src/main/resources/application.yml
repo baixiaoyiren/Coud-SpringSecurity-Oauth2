@@ -1,0 +1,96 @@
+server:
+  port: 80
+  servlet:
+    context-path: /gateway
+
+spring:
+
+  profiles:
+    active: dev
+
+  application:
+    name: security-oauth2-auth
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ENC(YvJQQ0PBN7Rfq5tFdf28nwzaVRdnoA+oZNIN93A/rCg=) #往这个地址注册自己,不指定命名空间。会默认注册到public里面去，不指定会分组，会注册到default分组中去
+        username: nacos
+        password: ENC(GmCWpPm6LjVVHJOn6SJZXw==)
+        namespace: 791aacd4-29c3-4f85-92ab-5606c7cd108b #表示注册到这个命名空间
+        service: gateway  #这个是服务名称，如果不写，默认取应用名称作为服务名称
+        group: dev
+
+
+    gateway:
+
+      #   gateway 解决跨域问题
+      globalcors: # 全局的跨域处理
+        add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+              # 允许哪些网站的跨域请求
+            #              - "http://localhost:8090"
+            allowedMethods: "*"
+            # 允许的跨域ajax的请求方式
+            #              - "GET"
+            #              - "POST"
+            #              - "DELETE"
+            #              - "PUT"
+            #              - "OPTIONS"
+            #  "*" 代表允许所有请求
+            allowedHeaders: "*" # 允许在请求中携带的头信息
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000 # 这次跨域检测的有效期
+      discovery:
+        locator:
+          enabled: false #设置为true 请求路径前可以添加微服务名称
+          lower-case-service-id: true # 允许转为小写
+
+
+      routes: #集合。
+        - id: oauth2-auth  #ID：唯一标示，默认是一个UUID
+          uri: lb://auth
+          predicates: #predicates: 条件，用于请求网关路径的匹配规则
+            - Path=/auth/**
+        - id: oauth2-order  #ID：唯一标示，默认是一个UUID
+          uri: lb://order
+          predicates: #predicates: 条件，用于请求网关路径的匹配规则
+            - Path=/order/**
+
+#   网关自己的有的负载均衡
+      global-filter:
+        load-balancer-client:
+          enabled: true
+
+# 关闭springcloud组件的负载均衡
+    loadbalancer:
+      ribbon:
+        enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          #配置RSA的公钥访问地址
+          jwk-set-uri: 'http://localhost:9401/auth/rsa/publicKey'
+
+
+  redis:
+    port: 6379
+    host: ENC(/f5DkTNCTuQjfyaISe7BmuOIgB0YjIA5)
+    password: ENC(K4io0bLVFL5qzbj+RqzexeVu9IPWLGlH)
+
+#YML文件加密解密
+jasypt:
+  encryptor:
+    password: modebing
+    algorithm: PBEWithMD5AndDES
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+

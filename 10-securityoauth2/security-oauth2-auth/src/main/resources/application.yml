@@ -1,0 +1,64 @@
+server:
+  port: 9401
+  servlet:
+    context-path: /auth
+
+spring:
+  profiles:
+    active: dev
+
+  application:
+    name: security-oauth2-auth
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ENC(YvJQQ0PBN7Rfq5tFdf28nwzaVRdnoA+oZNIN93A/rCg=) #往这个地址注册自己,不指定命名空间。会默认注册到public里面去，不指定会分组，会注册到default分组中去
+        username: nacos
+        password: ENC(GmCWpPm6LjVVHJOn6SJZXw==)
+        namespace: 791aacd4-29c3-4f85-92ab-5606c7cd108b #表示注册到这个命名空间
+        service: auth  #这个是服务名称，如果不写，默认取应用名称作为服务名称
+        group: dev
+
+
+  main:
+    allow-bean-definition-overriding: true
+
+
+  redis:
+    port: 6379
+    host: ENC(/f5DkTNCTuQjfyaISe7BmuOIgB0YjIA5)
+    password: ENC(K4io0bLVFL5qzbj+RqzexeVu9IPWLGlH)
+  datasource:
+    druid:
+      url: ENC(/xi5xR0EX2vNlpt4e3R2rtTrENR73UcsPDJu5OwMXlKwSkibeh02ARBb9dQUIBuLdwoGMh1A6SAcXXXyAiXMcw==)
+      username: root
+      password: Ju5OwMXlKwSkibeh02ARBb9dQ
+      driver-class-name: com.mysql.jdbc.Driver
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT user()
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      connection-properties: druid.stat.mergeSql:true;druid.stat.slowSqlMillis:5000
+      db-type: com.alibaba.druid.pool.DruidDataSource
+
+
+jasypt:
+  encryptor:
+    password: modebing
+    algorithm: PBEWithMD5AndDES
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+

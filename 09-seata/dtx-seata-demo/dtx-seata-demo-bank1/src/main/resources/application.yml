@@ -1,0 +1,93 @@
+spring:
+  application:
+    name: seata-demo-bank1
+  profiles:
+    active: local
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 101.34.251.234:8848 #往这个地址注册自己,不指定命名空间。会默认注册到public里面去，不指定会分组，会注册到default分组中去
+        username: nacos
+        password: nacos
+        namespace: 5defaa36-848e-4e33-9fc8-bda30c254e9d
+        group: SEATA_GROUP
+
+
+
+  main:
+    allow-bean-definition-overriding: true
+
+# 配置seata客户端的信息
+
+
+seata:
+  config:
+    type: nacos
+    nacos:
+      server-addr: 101.34.251.234:8848
+      username: nacos
+      password: nacos
+      group: SEATA_GROUP
+      namespace: f953b6e7-cb2d-4a51-9c5b-4562f4e36d7c
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 101.34.251.234:8848
+      username: nacos
+      password: nacos
+      group: SEATA_GROUP
+      namespace: f953b6e7-cb2d-4a51-9c5b-4562f4e36d7c
+      application: seata-server
+      cluster: defalut
+  tx-service-group: guangzhou
+
+
+
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+
+server:
+  servlet:
+    context-path: /bank1
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info,env
+
+
+feign:
+  hystrix:
+    enabled: true
+  compression:
+    request:
+      enabled: true # 配置请求GZIP压缩
+      mime-types: ["text/xml","application/xml","application/json"] # 配置压缩支持的MIME TYPE
+      min-request-size: 2048 # 配置压缩数据大小的下限
+    response:
+      enabled: true # 配置响应GZIP压缩
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000  # 设置熔断超时时间  default 1000
+        timeout:
+          enabled: true # 打开超时熔断功能 default true
+
+
+ribbon:
+  ConnectTimeout: 60000 # 设置连接超时时间 default 2000
+  ReadTimeout: 60000   # 设置读取超时时间  default 5000
+  OkToRetryOnAllOperations: true # 对所有操作请求都进行重试  default false
+  MaxAutoRetriesNextServer: 20    # 切换实例的重试次数  default 1
+  MaxAutoRetries: 10     # 对当前实例的重试次数 default 0
+

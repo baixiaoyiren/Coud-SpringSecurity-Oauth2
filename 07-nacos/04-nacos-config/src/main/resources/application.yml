@@ -1,0 +1,29 @@
+server:
+  port: 6668
+
+spring:
+  application:
+    name: nacos-config
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.98.252.249:8848 #往这个地址注册自己,不指定命名空间。会默认注册到public里面去，不指定会分组，会注册到default分组中去
+        username: nacos
+        password: nacos
+        namespace: 791aacd4-29c3-4f85-92ab-5606c7cd108b #表示注册到这个命名空间
+#        service: nacos-config  #这个是服务名称，如果不写，默认取应用名称作为服务名称
+        group: dev
+      config:
+        server-addr: 47.98.252.249:8848
+        username: nacos
+        password: nacos
+        namespace: 791aacd4-29c3-4f85-92ab-5606c7cd108b
+        group: DEFAULT_GROUP
+        file-extension: yaml # 文件类型
+#暴露所有的监控断端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

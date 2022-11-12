@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+  rabbitmq:
+    host: 192.168.88.81
+    port: 5672
+    username: modebing
+    password: 123456
+    connection-timeout: 120000
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    listener:
+      direct:
+        acknowledge-mode: manual
+
+

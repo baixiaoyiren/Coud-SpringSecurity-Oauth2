@@ -1,0 +1,54 @@
+spring:
+  profiles:
+    active: dev
+  rabbitmq:
+    host: 192.168.88.81
+    port: 5672
+    username: modebing
+    password: 123456
+    connection-timeout: 120000
+    virtual-host: /
+
+    #    消费端 手动确认收到消息   ACK模式 默认为auto
+#    listener:
+#      direct:
+##需要人为地获取到channel之后调用方法向server发送ack（或消费失败时的nack）信息
+##        手动确认acknowledge=“manual”
+#        acknowledge-mode: manual
+##        一次从queue中取出多少消息来消费
+#        prefetch: 100000
+#        #        一个队列可以被多少消费者消费
+#        consumers-per-queue: 2
+
+#        失败重试
+#        retry:
+#          #        最大重试次数
+#          max-attempts:  5
+#          initial-interval: 3000 #重试时间间隔
+
+
+#
+#      simple:
+#        retry:
+#          enabled: true
+#        acknowledge-mode: manual
+
+    #    开启发布确认
+    publisher-confirm-type: correlated
+    #    开启回退模式
+    publisher-returns: true
+    template:
+      mandatory: true
+
+    #    ACK模式 默认为auto
+    listener:
+      direct:
+        acknowledge-mode: manual
+
+        #    开启重试
+        retry:
+          enabled: true
+          #           最大重试次数 3次
+          max-attempts: 3
+          #           重试间隔 2秒
+          max-interval: 2000
