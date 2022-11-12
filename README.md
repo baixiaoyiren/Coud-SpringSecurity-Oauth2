@@ -15,9 +15,10 @@ springcloud 复习和实现nacos+oauth2+gateway 网关统一认证和授权
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. springsecurity oauth2 学习笔记详见：
+
+   [SpringSecurity-Oauth2](./SpringSecurity-Oauth2.md)
+
 
 #### 参与贡献
 
