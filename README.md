@@ -19,6 +19,11 @@ springcloud 复习和实现nacos+oauth2+gateway 网关统一认证和授权
 
    [SpringSecurity-Oauth2](./SpringSecurity-Oauth2.md)
 
+2. 涉及到的所有数据库和表：
+
+   [sql](./sql)
+
+
 
 #### 参与贡献
 
