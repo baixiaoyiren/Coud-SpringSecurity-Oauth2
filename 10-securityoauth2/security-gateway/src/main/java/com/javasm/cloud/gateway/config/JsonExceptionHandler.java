@@ -43,7 +43,9 @@ public class JsonExceptionHandler implements WebExceptionHandler {
         ResultCode resultCode = null;
         if (ex instanceof ResponseStatusException && ((ResponseStatusException) ex).getStatus() == HttpStatus.UNAUTHORIZED) {
             resultCode = ResultCode.EXPIRED;
-        } else {
+        } else if ((ex instanceof ResponseStatusException && ((ResponseStatusException) ex).getStatus() == HttpStatus.NOT_FOUND)){
+            resultCode = ResultCode.ERROR;
+        } else{
             resultCode = ResultCode.BADREQUEST;
         }
         response.getHeaders().set(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
