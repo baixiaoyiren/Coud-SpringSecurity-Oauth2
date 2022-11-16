@@ -2,6 +2,7 @@ package com.javasm.cloud.gateway.config;
 
 import com.javasm.cloud.common.entity.ResultCode;
 import com.javasm.cloud.common.utils.IgnoreUrlUtils;
+import com.javasm.cloud.gateway.filter.WhiteListAuthorizationFilter;
 import com.javasm.cloud.gateway.utils.WebFluxUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +37,8 @@ public class ResourceServerConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-
-
+        // 1、自定义处理JWT请求头过期或签名错误的结果
+        http.oauth2ResourceServer().authenticationEntryPoint(authenticationEntryPoint());
         http
                 .oauth2ResourceServer()
                 .jwt()
@@ -50,9 +51,8 @@ public class ResourceServerConfig {
 
         http.authorizeExchange()
                 // 白名单
-
                 .pathMatchers(ignoreUrlUtils.ignoreUrlByRedis().toArray(new String[0])).permitAll()
-                .anyExchange().access(authorizationManager)
+                .anyExchange().access(authorizationManager) // 鉴权管理器配置
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint()) //处理未认证

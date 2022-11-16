@@ -35,7 +35,6 @@ public class IgnoreUrlUtils {
         }
         List<String> paths = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            log.info("ignore url:{},permissions:{}",entry.getKey(),entry.getValue());
             List<String> permissions = entry.getValue();
             if (CollectionUtils.isEmpty(permissions)){
                 paths.add(entry.getKey());

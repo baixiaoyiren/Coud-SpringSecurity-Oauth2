@@ -1,10 +1,8 @@
-package com.javasm.cloud.gateway.config;
+package com.javasm.cloud.gateway.handler;
 
 import cn.hutool.json.JSONUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javasm.cloud.common.entity.ResultCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -26,9 +24,6 @@ import java.nio.charset.StandardCharsets;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class JsonExceptionHandler implements WebExceptionHandler {
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     /**
      * 所有异常都会在这里被集中处理
