@@ -1,7 +1,7 @@
 package com.javasm.cloud.order.utils;
 
-import com.javasm.cloud.common.entity.Authentication;
 import com.javasm.cloud.common.entity.Constant;
+import com.javasm.cloud.common.entity.MyAuthentication;
 import com.javasm.cloud.common.entity.Permission;
 import com.javasm.cloud.common.utils.RedisCache;
 import lombok.extern.slf4j.Slf4j;
@@ -72,8 +72,8 @@ public class AuthenticationRedisUtils {
             Permission permissionAnnotation = entry.getValue().getMethodAnnotation(Permission.class);
             List<String> permissions = new ArrayList<>();
             if (Objects.nonNull(permissionAnnotation)){
-                Authentication[] authentications = permissionAnnotation.value();
-                List<String> list = Arrays.stream(authentications).map(Authentication::getValue).collect(Collectors.toList());
+                MyAuthentication[] authentications = permissionAnnotation.value();
+                List<String> list = Arrays.stream(authentications).map(MyAuthentication::getValue).collect(Collectors.toList());
                 permissions.addAll(list);
             }
 

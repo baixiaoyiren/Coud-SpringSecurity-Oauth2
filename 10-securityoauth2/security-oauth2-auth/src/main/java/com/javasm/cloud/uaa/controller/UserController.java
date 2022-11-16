@@ -45,4 +45,11 @@ public class UserController {
         userService.setUserInfo(vo);
         return new Response(ResultCode.SUCCESS);
     }
+
+    // 退出登录
+    @PostMapping("/user/logout")
+    @Permission
+    public Response logout(Authentication authentication){
+        return userService.logout(authentication);
+    }
 }

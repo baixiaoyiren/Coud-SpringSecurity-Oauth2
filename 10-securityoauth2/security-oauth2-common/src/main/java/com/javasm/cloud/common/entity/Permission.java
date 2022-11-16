@@ -16,5 +16,5 @@ import java.lang.annotation.*;
 @Documented
 @Indexed
 public @interface Permission {
-    Authentication[] value() default Authentication.QUERY;
+    MyAuthentication[] value() default MyAuthentication.QUERY;
 }

@@ -6,7 +6,7 @@ package com.javasm.cloud.common.entity;
  * Date：2022-11-11-16:50
  * Description: 权限信息
  */
-public enum Authentication {
+public enum MyAuthentication {
 
     INSERT("insert","新增权限"),
     QUERY("query","查询权限"),
@@ -17,7 +17,7 @@ public enum Authentication {
 
     private String desc;
 
-    Authentication(String value, String desc) {
+    MyAuthentication(String value, String desc) {
         this.value = value;
         this.desc = desc;
     }
