@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ignoreUrls.add("**/oauth/**");
         ignoreUrls.add("**/login/**");
         ignoreUrls.add("**/logout/**");
+        ignoreUrls.add("**/getToken/**");
         String[] array = ignoreUrls.toArray(new String[0]);
         //for (String s : array) {
         //    System.out.println(s);

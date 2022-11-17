@@ -1,5 +1,5 @@
 server:
-  port: 9401
+  port: 9403
   servlet:
     context-path: /auth
 
