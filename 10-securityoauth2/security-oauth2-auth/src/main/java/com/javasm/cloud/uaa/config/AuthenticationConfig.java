@@ -6,7 +6,6 @@ import com.javasm.cloud.uaa.utils.WebUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
@@ -156,10 +155,6 @@ public class AuthenticationConfig extends AuthorizationServerConfigurerAdapter {
                 .tokenStore(jwtTokenStore)
                 // 配置存储策略
                 .accessTokenConverter(jwtAccessTokenConverter)
-                .tokenEnhancer(enhancerChain)
-                // 自定义的获取token的方法必须要设置，不然会报错
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST,
-                        HttpMethod.OPTIONS, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE);
-                //.pathMapping("/auth/oauth/token", "/auth/getToken");
+                .tokenEnhancer(enhancerChain);
     }
 }

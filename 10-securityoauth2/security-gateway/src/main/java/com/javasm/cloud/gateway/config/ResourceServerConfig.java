@@ -2,6 +2,7 @@ package com.javasm.cloud.gateway.config;
 
 import com.javasm.cloud.common.entity.ResultCode;
 import com.javasm.cloud.common.utils.IgnoreUrlUtils;
+import com.javasm.cloud.gateway.filter.AuthGlobalFilter;
 import com.javasm.cloud.gateway.filter.WhiteListAuthorizationFilter;
 import com.javasm.cloud.gateway.utils.WebFluxUtils;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,12 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableWebFluxSecurity
 @Slf4j
+
 public class ResourceServerConfig {
     private final AuthorizationManager authorizationManager;
     private final IgnoreUrlUtils ignoreUrlUtils;
     private final WhiteListAuthorizationFilter whiteListRemoveJwtFilter;
+    private final AuthGlobalFilter globalFilter;
 
 
     @Bean
@@ -48,6 +51,7 @@ public class ResourceServerConfig {
         //.jwkSetUri("http://localhost:9401/auth/rsa/publicKey");  // 远程获取公钥，默认读取的key是spring.security.oauth2.resourceserver.jwt.jwk-set-uri
         // 对白名单路径，直接移除JWT请求头，不移除的话，后台会校验jwt
         http.addFilterBefore(whiteListRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+        http.addFilterBefore(globalFilter, SecurityWebFiltersOrder.AUTHENTICATION);
 
         http.authorizeExchange()
                 // 白名单

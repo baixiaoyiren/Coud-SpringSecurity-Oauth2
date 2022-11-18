@@ -11,7 +11,7 @@ public enum ResultCode {
     SUCCESS(200,"成功"),
     ERROR(404,"请求丢失"),
     BADREQUEST(400,"错误请求"),
-    UNAUTHORIZED(401,"认证不成功,token失效或丢失"),
+    UNAUTHORIZED(401,"认证不成功,请重新登录"),
     EXPIRED(402,"认证不成功,token失效"),
     FORBIDDEN(403,"没有权限，禁止访问");
 

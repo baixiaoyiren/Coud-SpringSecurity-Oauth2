@@ -1,7 +1,6 @@
 package com.javasm.cloud.common.entity;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Author：MoDebing
@@ -27,7 +26,6 @@ public class Response<T> implements Serializable {
 
     public Response msg(String msg){
         this.msg = msg;
-        resultCode.setMsg(msg);
         return this;
     }
 
@@ -38,10 +36,7 @@ public class Response<T> implements Serializable {
     }
 
     public int getCode() {
-        if (Objects.nonNull(resultCode)){
-            return resultCode.getCode();
-        }
-        return 0;
+        return code;
     }
 
     public T getData() {
@@ -50,6 +45,6 @@ public class Response<T> implements Serializable {
 
 
     public String getMsg() {
-        return resultCode.getMsg();
+        return msg;
     }
 }

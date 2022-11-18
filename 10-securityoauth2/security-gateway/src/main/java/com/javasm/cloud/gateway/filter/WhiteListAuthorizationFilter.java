@@ -2,6 +2,7 @@ package com.javasm.cloud.gateway.filter;
 
 import com.javasm.cloud.common.utils.IgnoreUrlUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class WhiteListAuthorizationFilter implements WebFilter {
+public class WhiteListAuthorizationFilter implements WebFilter, Ordered {
 
     @Resource
     private IgnoreUrlUtils ignoreUrlUtils;
@@ -44,5 +45,10 @@ public class WhiteListAuthorizationFilter implements WebFilter {
             }
         }
         return chain.filter(exchange);
+    }
+
+    @Override
+    public int getOrder() {
+        return -2;
     }
 }

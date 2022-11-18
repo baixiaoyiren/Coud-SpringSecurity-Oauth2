@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import java.text.ParseException;
@@ -32,7 +32,7 @@ import java.text.ParseException;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class AuthGlobalFilter implements GlobalFilter, Ordered {
+public class AuthGlobalFilter implements WebFilter, Ordered {
 
     private RedisCache redisCache;
 
@@ -41,7 +41,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthGlobalFilter.class);
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
         if (StrUtil.isEmpty(token)) {
             return chain.filter(exchange);
@@ -75,8 +75,9 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
+
     @Override
     public int getOrder() {
-        return 0;
+        return -1;
     }
 }
