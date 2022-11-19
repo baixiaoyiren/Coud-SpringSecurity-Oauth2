@@ -1,5 +1,5 @@
 server:
-  port: 9403
+  port: 9401
   servlet:
     context-path: /auth
 
@@ -34,7 +34,7 @@ spring:
       url: ENC(/xi5xR0EX2vNlpt4e3R2rtTrENR73UcsPDJu5OwMXlKwSkibeh02ARBb9dQUIBuLdwoGMh1A6SAcXXXyAiXMcw==)
       username: root
       password: Ju5OwMXlKwSkibeh02ARBb9dQ
-      driver-class-name: com.mysql.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
       initialSize: 5
       minIdle: 5
       maxActive: 20

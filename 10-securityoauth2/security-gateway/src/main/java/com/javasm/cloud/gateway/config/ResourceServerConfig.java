@@ -51,10 +51,11 @@ public class ResourceServerConfig {
         //.jwkSetUri("http://localhost:9401/auth/rsa/publicKey");  // 远程获取公钥，默认读取的key是spring.security.oauth2.resourceserver.jwt.jwk-set-uri
         // 对白名单路径，直接移除JWT请求头，不移除的话，后台会校验jwt
         http.addFilterBefore(whiteListRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+        // 全局过滤器验证token是否黑名单
         http.addFilterBefore(globalFilter, SecurityWebFiltersOrder.AUTHENTICATION);
 
         http.authorizeExchange()
-                // 白名单
+                // 用户白名单
                 .pathMatchers(ignoreUrlUtils.ignoreUrlByRedis().toArray(new String[0])).permitAll()
                 .anyExchange().access(authorizationManager) // 鉴权管理器配置
                 .and()

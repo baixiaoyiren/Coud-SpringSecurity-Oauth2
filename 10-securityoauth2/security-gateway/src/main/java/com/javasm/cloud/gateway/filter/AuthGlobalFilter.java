@@ -27,7 +27,7 @@ import java.text.ParseException;
  * 这里为什么要解析用户信息？
  * 比如你的请求里面需要根据当前用户的信息去获取到相关的资源，比如根据用户信息获取用户的昵称之类的
  *
- * @author Honghui [wanghonghui_work@163.com] 2021/3/16
+ * @author
  */
 @Component
 @AllArgsConstructor
@@ -62,7 +62,7 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
                             .flatMap(response -> WebFluxUtils.writeResponse(response, ResultCode.UNAUTHORIZED));
                 }
             }
-            if (StringUtils.isNotEmpty(realToken) && realToken.contains("Bearer")){
+            if (StringUtils.isNotEmpty(realToken)){
                 JWSObject jwsObject = JWSObject.parse(realToken);
                 String userStr = jwsObject.getPayload().toString();
                 LOGGER.info("AuthGlobalFilter.filter() user:{}", userStr);
