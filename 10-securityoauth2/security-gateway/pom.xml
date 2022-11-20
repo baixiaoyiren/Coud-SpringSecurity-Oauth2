@@ -57,6 +57,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--gateway引入spring web 组件，要排除tomcat-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -104,10 +105,14 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
         </dependency>
+        <!--spring-security-oauth2-jose 底层依赖 Nimbus，主要封装了两个大的 API:
+        JwtEncoder，负责对 JWT 编码（JWS 或 JWE
+        JwtDecoder，负责 JWT 的解码-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
+        <!--jwt-->
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>

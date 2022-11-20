@@ -7,6 +7,8 @@ package com.javasm.cloud.common.exception;
  * Description:
  */
 public class MyAuthenticationException extends RuntimeException{
+
+
     public MyAuthenticationException(String message) {
         super(message);
     }

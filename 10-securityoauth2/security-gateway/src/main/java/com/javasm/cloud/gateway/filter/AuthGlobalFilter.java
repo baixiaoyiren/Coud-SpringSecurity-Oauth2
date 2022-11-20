@@ -101,7 +101,7 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
                 exchange = exchange.mutate().request(request).build();
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new MyAuthenticationException("格式转换错误"+e.getMessage());
 
         } catch (ExecutionException e) {
             throw new MyAuthenticationException("线程异常....."+e.toString());

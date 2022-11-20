@@ -41,7 +41,6 @@ public class IgnoreUrlUtils {
             }
             paths.add("/auth/rsa/publicKey");
         }
-        log.info(paths.toString());
         return paths;
     }
 
