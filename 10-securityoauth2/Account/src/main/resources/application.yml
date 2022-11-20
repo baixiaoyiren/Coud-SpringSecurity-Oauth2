@@ -1,14 +1,14 @@
 server:
-  port: 9402
+  port: 9403
   servlet:
-    context-path: /order
+    context-path: /account
 
 spring:
   profiles:
     active: dev
 
   application:
-    name: security-oauth2-order
+    name: security-oauth2-account
 
   cloud:
     nacos:
@@ -17,7 +17,7 @@ spring:
         username: nacos
         password: ENC(GmCWpPm6LjVVHJOn6SJZXw==)
         namespace: 791aacd4-29c3-4f85-92ab-5606c7cd108b #表示注册到这个命名空间
-        service: order  #这个是服务名称，如果不写，默认取应用名称作为服务名称
+        service: account  #这个是服务名称，如果不写，默认取应用名称作为服务名称
         group: dev
 
 
@@ -40,5 +40,3 @@ management:
     web:
       exposure:
         include: "*"
-
-

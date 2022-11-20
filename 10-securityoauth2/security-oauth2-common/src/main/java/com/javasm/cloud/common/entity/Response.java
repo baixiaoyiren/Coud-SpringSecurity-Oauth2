@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Description:
  */
 public class Response<T> implements Serializable {
-    private final ResultCode resultCode;
+    private ResultCode resultCode;
     private T data;
 
     private int code;
@@ -17,6 +17,11 @@ public class Response<T> implements Serializable {
     private String msg;
 
     private static final long serialVersionUID = 9527L;
+
+    private Response() {
+    }
+
+
 
     public Response(ResultCode resultCode) {
         this.resultCode = resultCode;

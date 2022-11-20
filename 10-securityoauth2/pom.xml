@@ -16,6 +16,7 @@
         <module>security-oauth2-common</module>
         <module>security-gateway</module>
         <module>order</module>
+        <module>Account</module>
     </modules>
 
     <properties>

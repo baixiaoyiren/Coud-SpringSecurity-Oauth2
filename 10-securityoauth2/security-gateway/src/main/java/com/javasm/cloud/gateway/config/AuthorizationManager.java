@@ -4,12 +4,16 @@ import com.javasm.cloud.common.entity.Constant;
 import com.javasm.cloud.common.utils.RedisCache;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +35,13 @@ import java.util.List;
 public class AuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
     private RedisCache redisCache;
+
+    @Bean
+    public ResourceServerTokenServices resourceServerTokenServices(){
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setTokenStore(new InMemoryTokenStore());
+        return tokenServices;
+    }
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> mono, AuthorizationContext authorizationContext) {

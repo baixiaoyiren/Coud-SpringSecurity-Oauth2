@@ -1,13 +1,13 @@
-package com.javasm.cloud.uaa.utils;
+package com.javasm.cloud.common.utils;
 
 import com.javasm.cloud.common.entity.Constant;
 import com.javasm.cloud.common.entity.MyAuthentication;
 import com.javasm.cloud.common.entity.Permission;
-import com.javasm.cloud.common.utils.RedisCache;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
-
 /**
  * Author：MoDebing
  * Version：1.0
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 public class AuthenticationRedisUtils {
 
     @Autowired
+    @Lazy
     private WebApplicationContext applicationContext;
 
     @Autowired
@@ -62,7 +62,7 @@ public class AuthenticationRedisUtils {
         for (Map.Entry<String, List<String>> stringListEntry : permissionMap.entrySet()) {
             // 如果是当前服务的路径，就删除重置
             String key = stringListEntry.getKey();
-            if (key.contains(root)){
+            if (key.contains(root)&&!"\\".equals(root)){
                 deletePaths.add(key);
             }
         }

@@ -7,10 +7,9 @@ import com.javasm.cloud.uaa.entity.vo.RequestUserInfoVO;
 import com.javasm.cloud.uaa.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -23,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @AllArgsConstructor
-public class UserController {
+public class UserController{
 
     private UserServiceImpl userService;
+
+    private JwtTokenStore jwtTokenStore;
 
 
     @GetMapping("/getUserInfo")
@@ -53,7 +54,17 @@ public class UserController {
         return userService.logout(authentication);
     }
 
-
-
+    // 判断是否是刷新token
+    @RequestMapping("/user/isRefreshToken")
+    public Response convertAccessToken(String token) {
+        Response response = null;
+        try {
+            OAuth2AccessToken oAuth2AccessToken = jwtTokenStore.readAccessToken(token);
+            response = new Response<>(ResultCode.SUCCESS).data(oAuth2AccessToken).msg("获取token成功！");
+        } catch (Throwable e) {
+            response = new Response(ResultCode.BADREQUEST).msg(e.getMessage());
+        }
+        return response;
+    }
 
 }

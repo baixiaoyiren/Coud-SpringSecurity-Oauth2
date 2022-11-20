@@ -9,19 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>order</artifactId>
+    <artifactId>Account</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
-
     <dependencies>
         <dependency>
-        <groupId>com.github.ulisesbocchio</groupId>
-        <artifactId>jasypt-spring-boot-starter</artifactId>
-        <version>3.0.3</version>
-    </dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.3</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
         <dependency>
             <groupId>org.jasypt</groupId>
@@ -51,5 +50,4 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
-
 </project>

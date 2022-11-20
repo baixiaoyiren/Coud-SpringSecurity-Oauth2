@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * Author：MoDebing
  * Version：1.0
  * Date：2022-11-19-04:04
- * Description:
+ * Description: 获取token自定义返回结果
  */
 @Component
 @Aspect

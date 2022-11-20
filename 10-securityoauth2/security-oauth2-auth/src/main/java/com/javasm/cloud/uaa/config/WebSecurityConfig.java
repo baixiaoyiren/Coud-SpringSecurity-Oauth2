@@ -1,9 +1,8 @@
 package com.javasm.cloud.uaa.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javasm.cloud.uaa.utils.AuthenticationRedisUtils;
+import com.javasm.cloud.common.utils.AuthenticationRedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,15 +34,13 @@ import java.util.List;
 @Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+    @Resource
     AuthenticationRedisUtils redisUtils;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         List<String> ignoreUrls = redisUtils.getIgnoreUrls();
-        ignoreUrls.add("**/oauth/**");
-        ignoreUrls.add("**/login/**");
-        ignoreUrls.add("**/logout/**");
+        ignoreUrls.add("/auth/oauth/check_token/*");
         String[] array = ignoreUrls.toArray(new String[0]);
         //for (String s : array) {
         //    System.out.println(s);
@@ -58,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("**/logout").permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers(array).anonymous()
+                .antMatchers(array).permitAll()
                 .and()
                 .authorizeRequests()
                 .anyRequest()

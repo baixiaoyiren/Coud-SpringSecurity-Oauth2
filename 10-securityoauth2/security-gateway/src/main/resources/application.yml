@@ -59,6 +59,11 @@ spring:
           predicates: #predicates: 条件，用于请求网关路径的匹配规则
             - Path=/order/**
 
+        - id: oauth2-account  #ID：唯一标示，默认是一个UUID
+          uri: lb://account
+          predicates: #predicates: 条件，用于请求网关路径的匹配规则
+            - Path=/account/**
+
 #   网关自己的有的负载均衡
       global-filter:
         load-balancer-client:
@@ -80,6 +85,8 @@ spring:
     port: 6379
     host: ENC(/f5DkTNCTuQjfyaISe7BmuOIgB0YjIA5)
     password: ENC(K4io0bLVFL5qzbj+RqzexeVu9IPWLGlH)
+  main:
+    allow-bean-definition-overriding: true
 
 #YML文件加密解密
 jasypt:

@@ -1,6 +1,6 @@
 package com.javasm.cloud.uaa.config;
 
-import com.javasm.cloud.uaa.utils.AuthenticationRedisUtils;
+import com.javasm.cloud.common.utils.AuthenticationRedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
