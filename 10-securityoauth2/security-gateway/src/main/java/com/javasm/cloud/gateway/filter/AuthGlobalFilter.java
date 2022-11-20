@@ -86,8 +86,6 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
                 }
             }
 
-
-
             if (StringUtils.isNotEmpty(realToken)&&token.contains("Bearer")){
                 // 检查是不是刷新token  这个也可以在各个服务过滤器里面实现远程调用进行判断，这里不好的地方就是fegin请求是阻塞式的，会使用多线程额外处理
                 //远程调用，多线程调用，带有返回值的，因此会阻塞

@@ -19,7 +19,7 @@ import java.util.List;
  * Author：MoDebing
  * Version：1.0
  * Date：2022-11-20-05:39
- * Description:
+ * Description: 把feign改造成支持我们需要的格式
  */
 @Component
 public class MyFeignClient {
