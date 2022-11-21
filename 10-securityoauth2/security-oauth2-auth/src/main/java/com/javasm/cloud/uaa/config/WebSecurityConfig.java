@@ -2,6 +2,7 @@ package com.javasm.cloud.uaa.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javasm.cloud.common.utils.AuthenticationRedisUtils;
+import com.javasm.cloud.uaa.utils.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -72,9 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AccessDeniedHandler() {
             @Override
             public void handle(HttpServletRequest httpServletRequest, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-                response.setStatus(500);
-                response.getWriter().write("未认证");
-                response.setHeader("Content-Type","text/html; charset=utf-8");
+                WebUtils.renderString(response,"未认证");
             }
         };
     }
