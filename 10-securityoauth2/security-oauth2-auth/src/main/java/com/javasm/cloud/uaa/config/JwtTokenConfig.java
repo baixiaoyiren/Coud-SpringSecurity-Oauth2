@@ -60,6 +60,9 @@ public class JwtTokenConfig {
     /**
      * 配置该类用于TokenStore内部token和jwt的相互转换
      * //jwt转换器使用RSA非对称加密
+     *
+
+     *
      * @return
      */
     @Bean
@@ -77,14 +80,23 @@ public class JwtTokenConfig {
 
     /**
      * 从classpath下的密钥库中获取密钥对(公钥+私钥) RSA
+     *
+     * keytool -genkeypair -alias oauth2 -keyalg RSA -keypass oauth2 -keystore oauth2.jks -storepass oauth2
+     * 生成rsa证书，-storepass oauth2 ，-storepass后面的oauth2是密码
+     *
+     * -alias:密钥的别名
+     * -keyalg:使用的hash算法
+     * -keypass:密钥的访问密码
+     * -keystore:密钥库文件名，changgou.jks保存了生成的证书
+     * -storepass:密钥库的访问密码
      */
     @Bean
     public KeyPair keyPair()
     {
         //从classpath下的证书中获取秘钥对
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"),
-                "123456".toCharArray());
-        return keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("oauth2.jks"),
+                "modebing".toCharArray());
+        return keyStoreKeyFactory.getKeyPair("modebing", "modebing".toCharArray());
     }
 
 

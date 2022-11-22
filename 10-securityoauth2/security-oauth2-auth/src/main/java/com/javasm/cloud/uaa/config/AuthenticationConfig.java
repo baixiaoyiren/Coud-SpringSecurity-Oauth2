@@ -61,7 +61,8 @@ public class AuthenticationConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception
     {
-        //security.allowFormAuthenticationForClients();
+        // 支持以表单的方式提交client_id和client_srcret(不走basic，走表单提交)
+        security.allowFormAuthenticationForClients();
         security.accessDeniedHandler(new AccessDeniedHandler() {
             //认证失败
             @Override

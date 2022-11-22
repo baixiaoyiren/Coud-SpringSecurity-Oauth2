@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Date：2022-11-20-03:44
  * Description:
  */
-@FeignClient(value = "auth",url = "127.0.0.1",configuration = MyFeignClient.class)
+@FeignClient(value = "auth",configuration = MyFeignClient.class)
 public interface AuthFeignClient {
 
     // 判断是否是刷新token

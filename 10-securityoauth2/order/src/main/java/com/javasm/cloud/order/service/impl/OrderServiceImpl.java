@@ -4,8 +4,6 @@ import com.javasm.cloud.common.entity.Response;
 import com.javasm.cloud.order.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -23,11 +21,8 @@ public class OrderServiceImpl implements OrderService {
     // 编程式事务
     @Override
     public Response getOrder() {
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-
-            }
+        transactionTemplate.execute(item->{
+            return null;
         });
 
         return null;
