@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Component;
@@ -43,17 +42,15 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthGlobalFilter.class);
 
-    private final ThreadPoolTaskExecutor executor;
 
     private final TokenStore tokenStore;
 
 
     @Lazy
-    public AuthGlobalFilter(RedisCache redisCache, IgnoreUrlUtils ignoreUrlUtils, ThreadPoolTaskExecutor executor, TokenStore tokenStore) {
+    public AuthGlobalFilter(RedisCache redisCache, IgnoreUrlUtils ignoreUrlUtils,TokenStore tokenStore) {
         this.redisCache = redisCache;
         this.ignoreUrlUtils = ignoreUrlUtils;
 
-        this.executor = executor;
         this.tokenStore = tokenStore;
     }
 
