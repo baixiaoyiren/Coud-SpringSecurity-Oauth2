@@ -2,12 +2,10 @@ package com.javasm.cloud.gateway.filter;
 
 import cn.hutool.core.util.StrUtil;
 import com.javasm.cloud.common.entity.Constant;
-import com.javasm.cloud.common.entity.Response;
 import com.javasm.cloud.common.entity.ResultCode;
 import com.javasm.cloud.common.exception.MyAuthenticationException;
 import com.javasm.cloud.common.utils.IgnoreUrlUtils;
 import com.javasm.cloud.common.utils.RedisCache;
-import com.javasm.cloud.gateway.feign.AuthFeignClient;
 import com.javasm.cloud.gateway.utils.WebFluxUtils;
 import com.nimbusds.jose.JWSObject;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -26,9 +25,6 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import java.text.ParseException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * 将登录用户的JWT转化成用户信息的全局过滤器
@@ -47,17 +43,18 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthGlobalFilter.class);
 
-    private final AuthFeignClient authFeignClient;
-
     private final ThreadPoolTaskExecutor executor;
+
+    private final TokenStore tokenStore;
 
 
     @Lazy
-    public AuthGlobalFilter(RedisCache redisCache, IgnoreUrlUtils ignoreUrlUtils, AuthFeignClient authFeignClient, ThreadPoolTaskExecutor executor) {
+    public AuthGlobalFilter(RedisCache redisCache, IgnoreUrlUtils ignoreUrlUtils, ThreadPoolTaskExecutor executor, TokenStore tokenStore) {
         this.redisCache = redisCache;
         this.ignoreUrlUtils = ignoreUrlUtils;
-        this.authFeignClient = authFeignClient;
+
         this.executor = executor;
+        this.tokenStore = tokenStore;
     }
 
     @Override
@@ -83,31 +80,18 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
                 }
             }
             if (StringUtils.isNotEmpty(realToken)&&token.contains("Bearer")){
-                // 检查是不是刷新token  这个也可以在各个服务过滤器里面实现远程调用进行判断，这里不好的地方就是fegin请求是阻塞式的，会使用多线程额外处理
-                //远程调用，多线程调用，带有返回值的，因此会阻塞
-                Response response = executor.submit(() -> authFeignClient.convertAccessToken(realToken)).get(30, TimeUnit.SECONDS);
-                // 远程调用，使用异步调用
-                //CompletionStage接口定义了任务编排的方法，执行某一阶段，可以向下执行后续阶段。
-                // 异步执行的，默认线程池是ForkJoinPool.commonPool()，但为了业务之间互不影响，且便于定位问题，强烈推荐使用自定义线程池。
-                //Response response = CompletableFuture.supplyAsync(() -> authFeignClient.convertAccessToken(realToken)).get();
-                if (response.getData() == null || response.getCode() == ResultCode.BADREQUEST.getCode()){
-                    throw new InvalidTokenException(response.getMsg());
-                }
+                // 检查是不是刷新token，直接配置tokenstore调用本地方法，减少网络IO，推荐
+                OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(realToken);
                 JWSObject jwsObject = JWSObject.parse(realToken);
                 String userStr = jwsObject.getPayload().toString();
                 LOGGER.info("AuthGlobalFilter.filter() user:{}", userStr);
+                LOGGER.info("AuthGlobalFilter.filter() oAuth2AccessToken expireTime:{},getAdditionalInformation:{}", oAuth2AccessToken.getExpiration(),oAuth2AccessToken.getAdditionalInformation());
                 ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
                 exchange = exchange.mutate().request(request).build();
             }
         } catch (ParseException e) {
             throw new MyAuthenticationException("格式转换错误:"+e.getMessage());
 
-        } catch (ExecutionException e) {
-            throw new MyAuthenticationException("线程异常:"+e.getMessage());
-        } catch (InterruptedException e) {
-            throw new MyAuthenticationException("线程被中断:"+e.getMessage());
-        } catch (TimeoutException e) {
-            e.printStackTrace();
         }
         return chain.filter(exchange);
     }
