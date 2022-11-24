@@ -10,8 +10,6 @@ import com.javasm.cloud.gateway.utils.WebFluxUtils;
 import com.nimbusds.jose.JWSObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -40,7 +38,6 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
 
     private final IgnoreUrlUtils ignoreUrlUtils;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(AuthGlobalFilter.class);
 
 
     private final TokenStore tokenStore;
@@ -81,8 +78,8 @@ public class AuthGlobalFilter implements WebFilter, Ordered {
                 OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(realToken);
                 JWSObject jwsObject = JWSObject.parse(realToken);
                 String userStr = jwsObject.getPayload().toString();
-                LOGGER.info("AuthGlobalFilter.filter() user:{}", userStr);
-                LOGGER.info("AuthGlobalFilter.filter() oAuth2AccessToken expireTime:{},getAdditionalInformation:{}", oAuth2AccessToken.getExpiration(),oAuth2AccessToken.getAdditionalInformation());
+                log.info("AuthGlobalFilter.filter() user:{}", userStr);
+                log.info("AuthGlobalFilter.filter() oAuth2AccessToken expireTime:{},getAdditionalInformation:{}", oAuth2AccessToken.getExpiration(),oAuth2AccessToken.getAdditionalInformation());
                 ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
                 exchange = exchange.mutate().request(request).build();
             }
