@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
  * Date：2022-11-11-16:41
  * Description:
  */
-@Component
 @Slf4j
 @Data
 public class AuthenticationRedisUtils {
@@ -33,6 +31,7 @@ public class AuthenticationRedisUtils {
     private WebApplicationContext applicationContext;
 
     @Autowired
+    @Lazy
     private RedisCache redisCache;
 
     @Value("${server.servlet.context-path}")

@@ -9,5 +9,5 @@ import com.javasm.cloud.common.entity.Response;
  * Description:
  */
 public interface OrderService {
-    Response getOrder();
+    Response getOrder(String account);
 }

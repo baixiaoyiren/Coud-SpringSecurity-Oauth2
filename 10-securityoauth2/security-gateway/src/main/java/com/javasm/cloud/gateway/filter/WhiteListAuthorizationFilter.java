@@ -35,7 +35,7 @@ public class WhiteListAuthorizationFilter implements WebFilter, Ordered {
         String path = request.getURI().getPath();
 
         PathMatcher pathMatcher = new AntPathMatcher();
-        //白名单路径移除请求头认证信息
+        // 白名单路径移除请求头认证信息
         List<String> urls = ignoreUrlUtils.ignoreUrlByRedis();
         for (String url : urls) {
             if (pathMatcher.match(url, path)) {

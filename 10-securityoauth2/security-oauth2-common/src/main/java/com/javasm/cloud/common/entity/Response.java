@@ -1,5 +1,7 @@
 package com.javasm.cloud.common.entity;
 
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * Date：2022-11-11-17:08
  * Description:
  */
+@ToString
 public class Response<T> implements Serializable {
     private ResultCode resultCode;
     private T data;

@@ -33,39 +33,47 @@ import java.util.List;
  */
 @EnableWebSecurity
 @Slf4j
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig{
 
     @Resource
     AuthenticationRedisUtils redisUtils;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        List<String> ignoreUrls = redisUtils.getIgnoreUrls();
-        ignoreUrls.add("/auth/oauth/check_token/*");
-        String[] array = ignoreUrls.toArray(new String[0]);
-        //for (String s : array) {
-        //    System.out.println(s);
-        //}
-        http.formLogin();
-        http
-                .csrf().disable()
-                //.formLogin()
-                //.loginPage("/uaa/login")
-                //.loginProcessingUrl("www.baidu.com")
-                //.and()
-                .logout()
-                .logoutUrl("**/logout").permitAll()
-                .and()
-                .authorizeRequests()
-                .antMatchers(array).permitAll()
-                .and()
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated();
-        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
-        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
 
+    @Bean
+    public WebSecurityConfigurerAdapter webSecurityConfigurerAdapter(){
+        return new WebSecurityConfigurerAdapter() {
+            @Override
+            protected void configure(HttpSecurity http) throws Exception {
+                List<String> ignoreUrls = redisUtils.getIgnoreUrls();
+                ignoreUrls.add("/auth/oauth/check_token/*");
+                String[] array = ignoreUrls.toArray(new String[0]);
+                //for (String s : array) {
+                //    System.out.println(s);
+                //}
+                http.formLogin();
+                http
+                        .csrf().disable()
+                        //.formLogin()
+                        //.loginPage("/uaa/login")
+                        //.loginProcessingUrl("www.baidu.com")
+                        //.and()
+                        .logout()
+                        .logoutUrl("**/logout").permitAll()
+                        .and()
+                        .authorizeRequests()
+                        .antMatchers(array).permitAll()
+                        .and()
+                        .authorizeRequests()
+                        .anyRequest()
+                        .authenticated();
+                http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
+
+            }
+        };
     }
+
+
 
 
     @Bean
@@ -107,9 +115,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @throws Exception
      */
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManagerBean(WebSecurityConfigurerAdapter webSecurityConfigurerAdapter) throws Exception {
+        return webSecurityConfigurerAdapter.authenticationManagerBean();
     }
 
     @Bean

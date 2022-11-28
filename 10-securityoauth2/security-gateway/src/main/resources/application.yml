@@ -9,7 +9,7 @@ spring:
     active: dev
 
   application:
-    name: security-oauth2-auth
+    name: security-oauth2-gateway
 
   cloud:
     nacos:

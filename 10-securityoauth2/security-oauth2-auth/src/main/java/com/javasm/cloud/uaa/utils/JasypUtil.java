@@ -80,10 +80,10 @@ public class JasypUtil {
         config.setAlgorithm("PBEWithMD5AndDES");
         // 类似于加盐
         String password = "modebing";
-        String text = "";
+        String text = "aa";
         standardPBEStringEncryptor.setConfig(config);
         standardPBEStringEncryptor.setPassword(password);
-        String encrypt = standardPBEStringEncryptor.encrypt(text);
+        String encrypt = standardPBEStringEncryptor.decrypt(text);
         System.out.println(encrypt);
     }
 }

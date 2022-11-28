@@ -22,7 +22,6 @@ spring:
 
 
 
-
   redis:
     port: 6379
     host: ENC(/f5DkTNCTuQjfyaISe7BmuOIgB0YjIA5)
@@ -34,11 +33,9 @@ jasypt:
     algorithm: PBEWithMD5AndDES
 
 
-
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-
 

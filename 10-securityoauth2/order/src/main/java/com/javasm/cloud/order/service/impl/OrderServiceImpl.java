@@ -1,10 +1,13 @@
 package com.javasm.cloud.order.service.impl;
 
 import com.javasm.cloud.common.entity.Response;
+import com.javasm.cloud.common.entity.ResultCode;
 import com.javasm.cloud.order.service.OrderService;
 import lombok.AllArgsConstructor;
+import org.apache.skywalking.apm.toolkit.trace.Tag;
+import org.apache.skywalking.apm.toolkit.trace.Tags;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * Author：MoDebing
@@ -16,15 +19,21 @@ import org.springframework.transaction.support.TransactionTemplate;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    private TransactionTemplate transactionTemplate;
+    //private TransactionTemplate transactionTemplate;
 
     // 编程式事务
     @Override
-    public Response getOrder() {
-        transactionTemplate.execute(item->{
-            return null;
-        });
+    @Trace //加了这个注解 ，skywalk也会将业务方法加入 到监控当中
+    @Tags({
+            @Tag(key = "getOrder",value = "returnedObj"), // key是方法名，returnedObj返回值.固定写法，就写returnedObj
+            @Tag(key = "getOrder",value = "arg[0]") // key是方法名，arg[0]是方法参数
+    })
+    public Response getOrder(String account) {
+        //transactionTemplate.execute(item->{
+        //    return null;
+        //});
 
-        return null;
+
+        return new Response(ResultCode.SUCCESS).data("aa");
     }
 }
