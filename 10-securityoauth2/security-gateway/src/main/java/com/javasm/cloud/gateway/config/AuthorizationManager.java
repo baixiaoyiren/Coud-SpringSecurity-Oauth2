@@ -57,6 +57,7 @@ public class AuthorizationManager{
 
             // 2、认证通过且角色匹配的用户可访问当前路径
             return mono
+                    //isAuthenticated 返回的是是否认证成功
                     .filter(Authentication::isAuthenticated)
                     .flatMapIterable(Authentication::getAuthorities)
                     .map(GrantedAuthority::getAuthority)
