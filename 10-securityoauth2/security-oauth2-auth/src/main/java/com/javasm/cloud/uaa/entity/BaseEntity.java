@@ -17,7 +17,7 @@ public class BaseEntity {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)//创建与修改时自动填充
+    @TableField(fill = FieldFill.INSERT)//创建时自动填充
     protected Date createTime;
 
     /**

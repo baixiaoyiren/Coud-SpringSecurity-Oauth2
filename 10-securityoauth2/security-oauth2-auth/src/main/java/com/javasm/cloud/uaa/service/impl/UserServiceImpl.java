@@ -117,9 +117,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         return user;
     }
 
+    @Override
     @Transactional(rollbackFor = Exception.class)
     // 添加用户和权限和角色
-    public Response setUserInfo(RequestUserInfoVO info) {
+    public void setUserInfo(RequestUserInfoVO info) {
         UserInfo authUser = info.getUser();
         List<Permission> permissions = info.getPermissions();
         Role role = info.getRole();
@@ -145,11 +146,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         userRole.setRoleId(role.getId());
         userRoleMapper.insert(userRole);
 
-        return new Response(ResultCode.SUCCESS);
-
     }
 
 
+    @Override
     @SneakyThrows
     public Response logout(Authentication authentication) {
         // 要实现退出逻辑方案：
