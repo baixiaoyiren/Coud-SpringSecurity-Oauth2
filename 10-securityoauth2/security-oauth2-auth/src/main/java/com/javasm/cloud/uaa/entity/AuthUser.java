@@ -64,10 +64,9 @@ public class AuthUser extends BaseEntity implements Serializable, UserDetails {
         this.enabled = enabled;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        for (Permission permission : permissions) {
-            this.permissions = new ArrayList<>();
-            this.permissions.add(new SimpleGrantedAuthority(permission.getName()));
-        }
+        this.permissions = new ArrayList<>();
+        this.permissions = permissions.stream().map(Permission::getName).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
     }
 
     @Override

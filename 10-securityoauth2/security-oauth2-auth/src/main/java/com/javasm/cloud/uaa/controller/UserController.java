@@ -4,7 +4,7 @@ import com.javasm.cloud.common.entity.Permission;
 import com.javasm.cloud.common.entity.Response;
 import com.javasm.cloud.common.entity.ResultCode;
 import com.javasm.cloud.uaa.entity.UserInfo;
-import com.javasm.cloud.uaa.entity.vo.LoginInfoVo;
+import com.javasm.cloud.uaa.entity.vo.OAuthLoginInfoVo;
 import com.javasm.cloud.uaa.entity.vo.RequestUserInfoVO;
 import com.javasm.cloud.uaa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,13 +46,13 @@ public class UserController{
     @PostMapping("/user/login")
     // 本系统内部指定登录入口
     public Response innerLogin(@RequestBody UserInfo userInfo){
-        LoginInfoVo loginInfoVo = new LoginInfoVo();
-        loginInfoVo.setUserName(userInfo.getUsername());
-        loginInfoVo.setPassword(userInfo.getPassword());
-        loginInfoVo.setId(id);
-        loginInfoVo.setSecret(secret);
-        loginInfoVo.setGrantType(grantType);
-        return userService.login(loginInfoVo);
+        OAuthLoginInfoVo oAuthLoginInfoVo = new OAuthLoginInfoVo();
+        oAuthLoginInfoVo.setUserName(userInfo.getUsername());
+        oAuthLoginInfoVo.setPassword(userInfo.getPassword());
+        oAuthLoginInfoVo.setId(id);
+        oAuthLoginInfoVo.setSecret(secret);
+        oAuthLoginInfoVo.setGrantType(grantType);
+        return userService.login(oAuthLoginInfoVo);
     }
 
 

@@ -11,7 +11,7 @@ import com.javasm.cloud.common.exception.CommonException;
 import com.javasm.cloud.common.exception.MyAuthenticationException;
 import com.javasm.cloud.common.utils.RedisCache;
 import com.javasm.cloud.uaa.entity.*;
-import com.javasm.cloud.uaa.entity.vo.LoginInfoVo;
+import com.javasm.cloud.uaa.entity.vo.OAuthLoginInfoVo;
 import com.javasm.cloud.uaa.entity.vo.RequestUserInfoVO;
 import com.javasm.cloud.uaa.mapper.*;
 import com.javasm.cloud.uaa.service.IUserService;
@@ -175,20 +175,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     // 远程调用接口进行登录
     @SneakyThrows
     @Override
-    public Response login(LoginInfoVo loginInfoVo) {
+    public Response login(OAuthLoginInfoVo oAuthLoginInfoVo) {
         // 创建post请求
         String url = "http://localhost/auth/oauth/token";
         List<BasicNameValuePair> body= new ArrayList<>();
-        body.add(new BasicNameValuePair("grant_type",loginInfoVo.getGrantType()));
-        body.add(new BasicNameValuePair("username",loginInfoVo.getUserName()));
-        body.add(new BasicNameValuePair("password",loginInfoVo.getPassword()));
-        body.add(new BasicNameValuePair("client_id",loginInfoVo.getId()));
-        body.add(new BasicNameValuePair("client_secret",loginInfoVo.getSecret()));
+        body.add(new BasicNameValuePair("grant_type", oAuthLoginInfoVo.getGrantType()));
+        body.add(new BasicNameValuePair("username", oAuthLoginInfoVo.getUserName()));
+        body.add(new BasicNameValuePair("password", oAuthLoginInfoVo.getPassword()));
+        body.add(new BasicNameValuePair("client_id", oAuthLoginInfoVo.getId()));
+        body.add(new BasicNameValuePair("client_secret", oAuthLoginInfoVo.getSecret()));
         String responseStr = null;
         try {
             responseStr = Request.Post(url).bodyForm(body).execute().returnContent().asString(StandardCharsets.UTF_8);
         } catch (Exception e) {
-            throw new CommonException("登录信息错误");
+            throw new CommonException("登录信息错误"+e.getMessage());
         }
         JSONObject jsonObject = JSONObject.parseObject(responseStr, JSONObject.class);
         // 返回的data是JsonObject对象

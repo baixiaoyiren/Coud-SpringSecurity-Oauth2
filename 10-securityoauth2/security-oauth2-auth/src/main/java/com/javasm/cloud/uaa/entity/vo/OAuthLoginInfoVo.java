@@ -9,7 +9,7 @@ import lombok.Data;
  * Description:
  */
 @Data
-public class LoginInfoVo {
+public class OAuthLoginInfoVo {
     private String userName;
 
     private String password;
