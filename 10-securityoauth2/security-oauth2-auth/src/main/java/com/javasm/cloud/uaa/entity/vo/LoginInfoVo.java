@@ -1,6 +1,5 @@
 package com.javasm.cloud.uaa.entity.vo;
 
-import com.javasm.cloud.uaa.entity.UserInfo;
 import lombok.Data;
 
 /**
@@ -11,7 +10,9 @@ import lombok.Data;
  */
 @Data
 public class LoginInfoVo {
-    private UserInfo userInfo;
+    private String userName;
+
+    private String password;
 
     private String secret;
 

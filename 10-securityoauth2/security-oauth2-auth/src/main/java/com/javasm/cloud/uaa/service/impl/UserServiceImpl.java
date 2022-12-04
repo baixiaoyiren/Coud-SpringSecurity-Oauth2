@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.javasm.cloud.common.entity.Constant;
 import com.javasm.cloud.common.entity.Response;
 import com.javasm.cloud.common.entity.ResultCode;
+import com.javasm.cloud.common.exception.CommonException;
 import com.javasm.cloud.common.exception.MyAuthenticationException;
 import com.javasm.cloud.common.utils.RedisCache;
 import com.javasm.cloud.uaa.entity.*;
@@ -30,7 +31,6 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -177,15 +177,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     @Override
     public Response login(LoginInfoVo loginInfoVo) {
         // 创建post请求
-        RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost/auth/oauth/token";
         List<BasicNameValuePair> body= new ArrayList<>();
         body.add(new BasicNameValuePair("grant_type",loginInfoVo.getGrantType()));
-        body.add(new BasicNameValuePair("username",loginInfoVo.getUserInfo().getUsername()));
-        body.add(new BasicNameValuePair("password",loginInfoVo.getUserInfo().getPassword()));
+        body.add(new BasicNameValuePair("username",loginInfoVo.getUserName()));
+        body.add(new BasicNameValuePair("password",loginInfoVo.getPassword()));
         body.add(new BasicNameValuePair("client_id",loginInfoVo.getId()));
         body.add(new BasicNameValuePair("client_secret",loginInfoVo.getSecret()));
-        String responseStr = Request.Post(url).bodyForm(body).execute().returnContent().asString(StandardCharsets.UTF_8);
+        String responseStr = null;
+        try {
+            responseStr = Request.Post(url).bodyForm(body).execute().returnContent().asString(StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new CommonException("登录信息错误");
+        }
         JSONObject jsonObject = JSONObject.parseObject(responseStr, JSONObject.class);
         // 返回的data是JsonObject对象
         return new Response(ResultCode.SUCCESS).data(jsonObject.get("data"));

@@ -45,9 +45,10 @@ public class UserController{
 
     @PostMapping("/user/login")
     // 本系统内部指定登录入口
-    public Response innerLoggin(@RequestBody UserInfo userInfo){
+    public Response innerLogin(@RequestBody UserInfo userInfo){
         LoginInfoVo loginInfoVo = new LoginInfoVo();
-        loginInfoVo.setUserInfo(userInfo);
+        loginInfoVo.setUserName(userInfo.getUsername());
+        loginInfoVo.setPassword(userInfo.getPassword());
         loginInfoVo.setId(id);
         loginInfoVo.setSecret(secret);
         loginInfoVo.setGrantType(grantType);
