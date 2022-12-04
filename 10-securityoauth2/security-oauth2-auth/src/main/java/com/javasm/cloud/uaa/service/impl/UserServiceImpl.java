@@ -10,6 +10,7 @@ import com.javasm.cloud.common.entity.ResultCode;
 import com.javasm.cloud.common.exception.MyAuthenticationException;
 import com.javasm.cloud.common.utils.RedisCache;
 import com.javasm.cloud.uaa.entity.*;
+import com.javasm.cloud.uaa.entity.vo.LoginInfoVo;
 import com.javasm.cloud.uaa.entity.vo.RequestUserInfoVO;
 import com.javasm.cloud.uaa.mapper.*;
 import com.javasm.cloud.uaa.service.IUserService;
@@ -17,6 +18,8 @@ import com.nimbusds.jose.JWSObject;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +30,10 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -166,5 +172,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         return new Response(ResultCode.SUCCESS).msg("退出登录成功");
     }
 
-
+    // 远程调用接口进行登录
+    @SneakyThrows
+    @Override
+    public Response login(LoginInfoVo loginInfoVo) {
+        // 创建post请求
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost/auth/oauth/token";
+        List<BasicNameValuePair> body= new ArrayList<>();
+        body.add(new BasicNameValuePair("grant_type",loginInfoVo.getGrantType()));
+        body.add(new BasicNameValuePair("username",loginInfoVo.getUserInfo().getUsername()));
+        body.add(new BasicNameValuePair("password",loginInfoVo.getUserInfo().getPassword()));
+        body.add(new BasicNameValuePair("client_id",loginInfoVo.getId()));
+        body.add(new BasicNameValuePair("client_secret",loginInfoVo.getSecret()));
+        String responseStr = Request.Post(url).bodyForm(body).execute().returnContent().asString(StandardCharsets.UTF_8);
+        JSONObject jsonObject = JSONObject.parseObject(responseStr, JSONObject.class);
+        // 返回的data是JsonObject对象
+        return new Response(ResultCode.SUCCESS).data(jsonObject.get("data"));
+    }
 }

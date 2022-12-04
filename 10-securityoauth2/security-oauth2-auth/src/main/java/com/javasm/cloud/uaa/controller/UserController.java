@@ -3,13 +3,18 @@ package com.javasm.cloud.uaa.controller;
 import com.javasm.cloud.common.entity.Permission;
 import com.javasm.cloud.common.entity.Response;
 import com.javasm.cloud.common.entity.ResultCode;
+import com.javasm.cloud.uaa.entity.UserInfo;
+import com.javasm.cloud.uaa.entity.vo.LoginInfoVo;
 import com.javasm.cloud.uaa.entity.vo.RequestUserInfoVO;
 import com.javasm.cloud.uaa.service.impl.UserServiceImpl;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -21,17 +26,42 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-11-05
  */
 @RestController
-@AllArgsConstructor
 public class UserController{
 
+    @Resource
     private UserServiceImpl userService;
-
+    @Resource
     private JwtTokenStore jwtTokenStore;
+
+    @Value("${auth.open_id}")
+    private String id;
+
+    @Value("${auth.open_secret}")
+    private String secret;
+
+    @Value("${auth.open_grant_type}")
+    private String grantType;
+
+
+    @PostMapping("/user/login")
+    // 本系统内部指定登录入口
+    public Response innerLoggin(@RequestBody UserInfo userInfo){
+        LoginInfoVo loginInfoVo = new LoginInfoVo();
+        loginInfoVo.setUserInfo(userInfo);
+        loginInfoVo.setId(id);
+        loginInfoVo.setSecret(secret);
+        loginInfoVo.setGrantType(grantType);
+        return userService.login(loginInfoVo);
+    }
+
 
 
     @GetMapping("/getUserInfo")
     @Permission
-    public Response getUserInfo(Authentication authentication){
+    public Response getUserInfo(Authentication authentication, HttpServletRequest request){
+        // 获取到用户的信息
+        String user = request.getHeader("user");
+        System.out.println(user);
         return new Response(ResultCode.SUCCESS).data(authentication);
     }
 

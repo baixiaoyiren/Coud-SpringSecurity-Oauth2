@@ -33,7 +33,7 @@ spring:
     druid:
       url: ENC(/xi5xR0EX2vNlpt4e3R2rtTrENR73UcsPDJu5OwMXlKwSkibeh02ARBb9dQUIBuLdwoGMh1A6SAcXXXyAiXMcw==)
       username: root
-      password: Ju5OwMXlKwSkibeh02ARBb9dQ
+      password: itheima8888
       driver-class-name: com.mysql.cj.jdbc.Driver
       initialSize: 5 # 初始化时建立物理连接的个数
       minIdle: 5 # 最小连接池数量
@@ -63,3 +63,8 @@ management:
         include: "*"
 
 
+# 第三方指定登录
+auth:
+  open_id: admin
+  open_secret: 123456
+  open_grant_type: password

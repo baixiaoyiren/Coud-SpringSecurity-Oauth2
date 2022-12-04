@@ -129,20 +129,20 @@ public class AuthUser extends BaseEntity implements Serializable, UserDetails {
         this.enabled = enabled;
     }
 
-
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
-
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-
+    @Override
     public Date getUpdateTime() {
         return updateTime;
     }
-
+    @Override
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
