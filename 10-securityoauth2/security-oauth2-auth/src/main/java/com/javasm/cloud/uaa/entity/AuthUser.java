@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +63,6 @@ public class AuthUser extends BaseEntity implements Serializable, UserDetails {
         this.enabled = enabled;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.permissions = new ArrayList<>();
         this.permissions = permissions.stream().map(Permission::getName).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
     }
